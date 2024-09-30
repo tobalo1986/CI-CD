@@ -1,38 +1,25 @@
-# This is a basic workflow to help you get started with Actions
+name: Fly Deploy
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - CICD   # Se ejecuta solo en la rama CICD
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  deploy:
+    name: Deploy app
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    concurrency: deploy-group    # Opcional: asegura que solo una acción se ejecute a la vez
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Estoy ejecuntado el Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
+    
       - name: Instalar dependencias
         run: npm install
+      - name : correr test
+        run: npm test
 
-      # Runs a set of commands using the runners shell
-      - name: Run test
-        run: npm run test
-
-      - name: Run echo
-        run: echo "Hola"
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
