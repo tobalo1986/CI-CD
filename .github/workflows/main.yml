@@ -9,7 +9,6 @@ jobs:
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
-    concurrency: deploy-group    # Opcional: asegura que solo una acción se ejecute a la vez
     steps:
       - uses: actions/checkout@v4
 
