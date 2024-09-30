@@ -9,17 +9,18 @@ on:
 jobs:
   deploy:
     name: Deploy app
-    runs-on: ubuntu-latest
-    concurrency: deploy-group   
+    runs-on: ubuntu-latest 
     steps:
 
       - uses: actions/checkout@v4
 
       - name: Instalar dependencias
         run: npm install
+        working-directory: ./curso-devops-gitactions
       
       - name: Ejecutar tests
         run: npm test
+        working-directory: ./curso-devops-gitactions
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only
