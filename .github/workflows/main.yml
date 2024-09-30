@@ -3,7 +3,7 @@ name: Fly Deploy
 on:
   push:
     branches:
-      - CICD   # Se ejecuta solo en la rama CICD
+      - main
 
 jobs:
   deploy:
